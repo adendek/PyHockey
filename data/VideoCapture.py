@@ -1,11 +1,14 @@
 from __future__ import division
+
 import threading
+
 import cv2
 import numpy as np
+
 from data.Player import Player
 
-class VideoCapture:
 
+class VideoCapture:
     def __init__(self, player, player2=None):
         self.player = player
         self.player2 = None
@@ -60,12 +63,12 @@ class VideoCapture:
         GAME_SIZE = (800, 600)
         # left side
         if player_id == Player.PLAYER_RED:
-            x = tup[0] * GAME_SIZE[0]/self.VIDEO_SIZE[0]
-            y = tup[1] * GAME_SIZE[1]/self.VIDEO_SIZE[1]
+            x = tup[0] * GAME_SIZE[0] / self.VIDEO_SIZE[0]
+            y = tup[1] * GAME_SIZE[1] / self.VIDEO_SIZE[1]
         # right side
         else:
-            x = tup[0] * GAME_SIZE[0]/self.VIDEO_SIZE[0] + GAME_SIZE[0]/2
-            y = tup[1] * GAME_SIZE[1]/self.VIDEO_SIZE[1]
+            x = tup[0] * GAME_SIZE[0] / self.VIDEO_SIZE[0] + GAME_SIZE[0] / 2
+            y = tup[1] * GAME_SIZE[1] / self.VIDEO_SIZE[1]
 
         return int(x), int(y)
 
@@ -95,9 +98,9 @@ class VideoCapture:
             if self.frame is None:
                 continue
             if player_id == Player.PLAYER_RED:
-                frame = self.frame[:, :self.VIDEO_SIZE[0]//2]
+                frame = self.frame[:, :self.VIDEO_SIZE[0] // 2]
             else:
-                frame = self.frame[:, self.VIDEO_SIZE[0]//2:]
+                frame = self.frame[:, self.VIDEO_SIZE[0] // 2:]
             frame = cv2.blur(frame, (3, 3))
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
             self.data[player_id]['last_pos'] = self.data[player_id]['pos']
@@ -119,13 +122,14 @@ class VideoCapture:
 
             if bestContour is not None:
                 M = cv2.moments(bestContour)
-                x, y = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
+                x, y = int(M['m10'] / M['m00']), int(M['m01'] / M['m00'])
                 game_x, game_y = self.convert_position(player_id, (x, y))
                 if player_id == Player.PLAYER_BLUE:
-                    x += self.VIDEO_SIZE[0]//2
+                    x += self.VIDEO_SIZE[0] // 2
                 self.data[player_id]['cam_pos'] = (x, y)
                 self.data[player_id]['pos'] = game_x, game_y
-                self.data[player_id]['vel'].append(((game_x - self.data[player_id]['last_pos'][0]), (game_y - self.data[player_id]['last_pos'][1])))
+                self.data[player_id]['vel'].append(((game_x - self.data[player_id]['last_pos'][0]),
+                                                    (game_y - self.data[player_id]['last_pos'][1])))
                 # self.data[player_id]['vel'] = (game_x - self.data[player_id]['last_pos'][0]), (game_y - self.data[player_id]['last_pos'][1])
             else:
                 self.data[player_id]['vel'].append((0, 0))
@@ -175,10 +179,15 @@ class VideoCapture:
         Gives velocity of object(s)
         :return: (vx, vy) or (vx1, vy1), (vx2, vy2)
         """
-        p1_vel = (sum([x[0] for x in self.data[self.player.player_id]['vel']])/len(self.data[self.player.player_id]['vel']), sum([x[1] for x in self.data[self.player.player_id]['vel']])/len(self.data[self.player.player_id]['vel']))
+        p1_vel = (
+        sum([x[0] for x in self.data[self.player.player_id]['vel']]) / len(self.data[self.player.player_id]['vel']),
+        sum([x[1] for x in self.data[self.player.player_id]['vel']]) / len(self.data[self.player.player_id]['vel']))
         # print self.data[self.player.player_id]['vel'], self.data[self.player2.player_id]['vel']
         if self.player2:
-            p2_vel = (sum([x[0] for x in self.data[self.player2.player_id]['vel']])/len(self.data[self.player2.player_id]['vel']), sum([x[1] for x in self.data[self.player2.player_id]['vel']])/len(self.data[self.player2.player_id]['vel']))
+            p2_vel = (sum([x[0] for x in self.data[self.player2.player_id]['vel']]) / len(
+                    self.data[self.player2.player_id]['vel']),
+                      sum([x[1] for x in self.data[self.player2.player_id]['vel']]) / len(
+                              self.data[self.player2.player_id]['vel']))
             # print p1_vel, p2_vel
             # return self.data[self.player.player_id]['vel'], self.data[self.player2.player_id]['vel']
             return p1_vel, p2_vel

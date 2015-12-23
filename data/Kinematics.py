@@ -1,7 +1,8 @@
 from __future__ import division
-import math
-from data.Vector import Vector
+
 from Logger import Logger
+from data.Vector import Vector
+
 
 class PhysicsObject(object):
     COEFFICIENT_OF_FRICTION = 0.99
@@ -11,7 +12,8 @@ class PhysicsObject(object):
     STOPPING_VELOCITY = 0.1
 
     def __init__(self, x_init, y_init, mass, radius, borders):
-        Logger.debug("KINEMATICS: PhysicsObject init(x_init=%s, y_init=%s, mass=%s, radius=%s, borders=%s)", str(x_init), str(y_init), str(mass), str(radius), str(borders))
+        Logger.debug("KINEMATICS: PhysicsObject init(x_init=%s, y_init=%s, mass=%s, radius=%s, borders=%s)",
+                     str(x_init), str(y_init), str(mass), str(radius), str(borders))
         self._pos = Vector(x_init, y_init)
         self._mass = mass
         self._radius = radius
@@ -37,16 +39,16 @@ class PhysicsObject(object):
         y_min, y_max = self._borders[1]
         log = False
         if self.pos.x - self.radius < x_min:
-            self.pos.x = x_min+self.radius
+            self.pos.x = x_min + self.radius
             log = True
         if self.pos.x + self.radius > x_max:
-            self.pos.x = x_max-self.radius
+            self.pos.x = x_max - self.radius
             log = True
         if self.pos.y - self.radius < y_min:
-            self.pos.y = y_min+self.radius
+            self.pos.y = y_min + self.radius
             log = True
         if self.pos.y + self.radius > y_max:
-            self.pos.y = y_max-self.radius
+            self.pos.y = y_max - self.radius
             log = True
         if log:
             Logger.debug("KINEMATICS: correct_position_in_borders pos.x=%s pos.y=%s", str(self.pos.x), str(self.pos.y))
@@ -58,21 +60,24 @@ class PhysicsObject(object):
             distance_vector.length = self.radius + obj.radius
             self._pos = obj.pos + distance_vector
             self.correct_position_in_borders()
-            Logger.debug("KINEMATICS: correct_position_post_collision distance_vector=%s self.radius=%s obj.radius=%s", str(distance_vector), str(self.radius), str(obj.radius))
+            Logger.debug("KINEMATICS: correct_position_post_collision distance_vector=%s self.radius=%s obj.radius=%s",
+                         str(distance_vector), str(self.radius), str(obj.radius))
         distance_vector = obj.pos - self.pos
 
         if distance_vector.length < obj.pos - self.pos:
             distance_vector.length = self.radius + obj.radius
             obj._pos = self._pos + distance_vector
             obj.correct_position_in_borders()
-        Logger.debug("KINEMATICS: correct_position_post_collision distance_vector=%s self.radius=%s obj.radius=%s", str(distance_vector), str(self.radius), str(obj.radius))
+        Logger.debug("KINEMATICS: correct_position_post_collision distance_vector=%s self.radius=%s obj.radius=%s",
+                     str(distance_vector), str(self.radius), str(obj.radius))
 
     # TODO: Add common move_to and move methods for mallet and disc
 
     def apply_speed_limit(self):
         from data.Disc import Disc
         from data.Mallet import Mallet
-        Logger.debug("KINEMATICS: apply_speed_limit MAX_DISC_VELOCITY=%s MAX_MALLET_VELOCITY=%s vel=%s", str(self.MAX_DISC_VELOCITY), str(self.MAX_MALLET_VELOCITY), str(self._vel.length))
+        Logger.debug("KINEMATICS: apply_speed_limit MAX_DISC_VELOCITY=%s MAX_MALLET_VELOCITY=%s vel=%s",
+                     str(self.MAX_DISC_VELOCITY), str(self.MAX_MALLET_VELOCITY), str(self._vel.length))
         if isinstance(self, Disc) and self._vel.length > self.MAX_DISC_VELOCITY:
             Logger.debug("KINEMATICS: apply_speed_limit is a Disc")
             self._vel.length = self.MAX_DISC_VELOCITY
@@ -98,8 +103,9 @@ class PhysicsObject(object):
     # TODO: Add unittests
     def circle_collision(self, object):
         from data.Disc import Disc
-        if self._pos.get_distance(object.pos) <= self._radius+object.radius:
-            Logger.debug("KINEMATICS: border_collision distance=%s self.radius=%s object.radius=%s", str(self._pos.get_distance(object.pos)), str(self._radius), str(object.radius))
+        if self._pos.get_distance(object.pos) <= self._radius + object.radius:
+            Logger.debug("KINEMATICS: border_collision distance=%s self.radius=%s object.radius=%s",
+                         str(self._pos.get_distance(object.pos)), str(self._radius), str(object.radius))
             vec_pos_diff = object.pos - self._pos
             vec_to = self._vel.projection(vec_pos_diff)
             obj_vec_to = object._vel.projection(vec_pos_diff)
@@ -107,8 +113,10 @@ class PhysicsObject(object):
             vec_side = self._vel - vec_to
             obj_vec_side = object._vel - obj_vec_to
 
-            after_vec_to = (vec_to*(self._mass-object._mass) + (2 * object._mass * obj_vec_to))/(self._mass + object._mass)
-            after_obj_vec_to = (obj_vec_to*(object._mass - self._mass) + (2 * self._mass * vec_to))/(self._mass + object._mass)
+            after_vec_to = (vec_to * (self._mass - object._mass) + (2 * object._mass * obj_vec_to)) / (
+            self._mass + object._mass)
+            after_obj_vec_to = (obj_vec_to * (object._mass - self._mass) + (2 * self._mass * vec_to)) / (
+            self._mass + object._mass)
 
             # Change velocity only if it is Disc
             if isinstance(self, Disc):

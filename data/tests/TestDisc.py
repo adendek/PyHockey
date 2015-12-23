@@ -1,8 +1,9 @@
 from __future__ import absolute_import
-import unittest
+
 import math
-#from data.Disc import Disc
-from DummyDisc import DummyDisc
+import unittest
+
+from data.tests.DummyDisc import DummyDisc
 from data.Vector import Vector
 
 
@@ -22,7 +23,7 @@ class TestDisc(unittest.TestCase):
                                ((1, 2), math.sqrt(5)),
                                ((100, 80), math.sqrt(16400)))
 
-    #we don't need to check whether disc is on pitch. It's a task of border_colision
+    # we don't need to check whether disc is on pitch. It's a task of border_colision
     def test_move_to(self):
         for tup in self.expected_points_to:
             t_disc = DummyDisc(tup[0][0], tup[0][1], 1, 26, [(0, 800), (0, 600)])
@@ -52,7 +53,6 @@ class TestDisc(unittest.TestCase):
             t_disc.accelerate(tup[1][0], tup[1][1])
             result = t_disc.vel.x, t_disc.vel.y
             self.assertEqual(tup[2], result)
-
 
 
 if __name__ == '__main__':

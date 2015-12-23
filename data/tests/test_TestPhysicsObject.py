@@ -1,13 +1,13 @@
-import unittest
 import random
-from data.Kinematics import PhysicsObject
-from data.Vector import Vector
-from data.Player import Player
-from data.Pitch import Pitch
+import unittest
+
 from mock import Mock
 
-class TestPhysicsObject(unittest.TestCase):
+from data.Kinematics import PhysicsObject
+from data.Vector import Vector
 
+
+class TestPhysicsObject(unittest.TestCase):
     MAX_RANDOM_VELOCITY = 25
     MIN_RANDOM_POSITION = 0
     MAX_RANDOM_POSITION = 100
@@ -35,10 +35,10 @@ class TestPhysicsObject(unittest.TestCase):
         for i in range(0, 1000):
             from data.Disc import Disc
             Disc.load_image = Mock()
-            po = Disc( random.randint(self.MIN_RANDOM_POSITION, self.MAX_RANDOM_POSITION),
-                                random.randint(self.MIN_RANDOM_POSITION, self.MAX_RANDOM_POSITION), 1,
-                                random.randint(self.MIN_RANDOM_RADIUS, self.MAX_RANDOM_RADIUS),
-                                [(25, 50), (25, 50)])
+            po = Disc(random.randint(self.MIN_RANDOM_POSITION, self.MAX_RANDOM_POSITION),
+                      random.randint(self.MIN_RANDOM_POSITION, self.MAX_RANDOM_POSITION), 1,
+                      random.randint(self.MIN_RANDOM_RADIUS, self.MAX_RANDOM_RADIUS),
+                      [(25, 50), (25, 50)])
             xmin, xmax = po._borders[0]
             ymin, ymax = po._borders[1]
             po.correct_position_in_borders()
@@ -46,7 +46,6 @@ class TestPhysicsObject(unittest.TestCase):
                             and po._pos.x + po._radius <= xmax
                             and po._pos.y - po._radius >= ymin
                             and po._pos.y + po._radius <= ymax)
-
 
     def test_correct_position_post_collision(self):
         from data.Mallet import Mallet
