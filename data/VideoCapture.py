@@ -142,9 +142,6 @@ class VideoCapture(AbstractVideoCapture):
                 self.data[player_id]['vel'].append((0, 0))
                 # self.data[player_id]['vel'] = (0, 0)
 
-    def get_players_positions(self, frame):
-        pass
-
     def start_capture(self):
         """
         starting new thread - get_image

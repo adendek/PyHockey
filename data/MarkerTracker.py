@@ -1,10 +1,7 @@
-from AbstractVideoCapture import AbstractVideoCapture
+from AbstractMarkerTracker import AbstractMarkerTracker
 
 
-class  VideoCaptureNew(AbstractVideoCapture):
+class  MarkerTracker(AbstractMarkerTracker):
 
     def get_players_positions(self, frame):
-        pass
-
-    def get_frame(self):
         pass
