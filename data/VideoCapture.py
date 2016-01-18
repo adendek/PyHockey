@@ -1,40 +1,34 @@
 from __future__ import division
-
 import threading
-
 import cv2
 import numpy as np
-
 from data.Player import Player
+from AbstractVideoCapture import AbstractVideoCapture
 
 
-class VideoCapture:
-    def __init__(self, player, player2=None):
+class VideoCapture(AbstractVideoCapture):
+    def __init__(self, player, player2):
         self.player = player
-        self.player2 = None
-        self.data = dict()
+        self.player2 = player2
         self.frame = None
         self.VIDEO_SIZE = (400, 300)
-
+        self.GAME_SIZE = (800, 600)
+        self.cap = cv2.VideoCapture(0)
+        self.data = dict()
         self.data[player.player_id] = {
             'cam_pos': self.player.mallet.pos.state,
             'pos': self.player.mallet.pos.state,
             'last_pos': self.player.mallet.pos.state,
             'vel': [(0, 0)]
-            # 'vel': (0, 0)
         }
         self.set_color_mask(self.player)
-        if player2:
-            self.player2 = player2
-            self.data[player2.player_id] = {
-                'cam_pos': self.player2.mallet.pos.state,
-                'pos': self.player2.mallet.pos.state,
-                'last_pos': self.player2.mallet.pos.state,
-                # 'vel': (0, 0)
-                'vel': [(0, 0)]
-            }
-            self.set_color_mask(self.player2)
-
+        self.data[player2.player_id] = {
+            'cam_pos': self.player2.mallet.pos.state,
+            'pos': self.player2.mallet.pos.state,
+            'last_pos': self.player2.mallet.pos.state,
+            'vel': [(0, 0)]
+        }
+        self.set_color_mask(self.player2)
         self._stop_capture = threading.Event()
         self._stop_image_processing = threading.Event()
 
@@ -60,15 +54,14 @@ class VideoCapture:
         :param tup: (x, y)
         :return:
         """
-        GAME_SIZE = (800, 600)
         # left side
         if player_id == Player.PLAYER_RED:
-            x = tup[0] * GAME_SIZE[0] / self.VIDEO_SIZE[0]
-            y = tup[1] * GAME_SIZE[1] / self.VIDEO_SIZE[1]
+            x = tup[0] * self.GAME_SIZE[0] / self.VIDEO_SIZE[0]
+            y = tup[1] * self.GAME_SIZE[1] / self.VIDEO_SIZE[1]
         # right side
         else:
-            x = tup[0] * GAME_SIZE[0] / self.VIDEO_SIZE[0] + GAME_SIZE[0] / 2
-            y = tup[1] * GAME_SIZE[1] / self.VIDEO_SIZE[1]
+            x = tup[0] * self.GAME_SIZE[0] / self.VIDEO_SIZE[0] + self.GAME_SIZE[0] / 2
+            y = tup[1] * self.GAME_SIZE[1] / self.VIDEO_SIZE[1]
 
         return int(x), int(y)
 
@@ -77,15 +70,41 @@ class VideoCapture:
         Loop which retrieve frames from Camera
         :return:
         """
-        cap = cv2.VideoCapture(0)
         while not self._stop_capture.is_set():
-            _, frame = cap.read()
-            self.frame = cv2.resize(cv2.flip(frame, 1), self.VIDEO_SIZE)
-            for player_id in self.data.keys():
-                cv2.circle(self.frame, self.data[player_id]['cam_pos'], 10, self.data[player_id]['circle_color'], 2)
+            self.get_frame()
+            self.draw_circle_for_players()
             cv2.imshow('frame', self.frame)
             k = cv2.waitKey(33) & 0xFF
         cv2.destroyAllWindows()
+
+    def get_frame(self):
+        _, frame = self.cap.read()
+        self.frame = cv2.resize(cv2.flip(frame, 1), self.VIDEO_SIZE)
+
+    def draw_circle_for_players(self):
+        for player_id in self.data.keys():
+            cv2.circle(self.frame, self.data[player_id]['cam_pos'], 10, self.data[player_id]['circle_color'], 2)
+
+    def filter_frame(self, player_id):
+        if player_id == Player.PLAYER_RED:
+            frame = self.frame[:, :self.VIDEO_SIZE[0] // 2]
+        else:
+            frame = self.frame[:, self.VIDEO_SIZE[0] // 2:]
+        frame = cv2.blur(frame, (3, 3))
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        return hsv
+
+    def refresh_player_position(self, player_id):
+        self.data[player_id]['last_pos'] = self.data[player_id]['pos']
+        if len(self.data[player_id]['vel']) > 4:
+            self.data[player_id]['vel'].pop(0)
+
+    def get_mask(self, hsv, player_id):
+        mask = cv2.inRange(hsv, self.data[player_id]['lower'], self.data[player_id]['upper'])
+        kernel = np.ones((5, 5), np.uint8)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+        mask = cv2.medianBlur(mask, 5)
+        return mask
 
     def get_players_data(self, player_id):
         """
@@ -94,23 +113,11 @@ class VideoCapture:
         :return:
         """
         while not self._stop_image_processing.is_set():
-
             if self.frame is None:
                 continue
-            if player_id == Player.PLAYER_RED:
-                frame = self.frame[:, :self.VIDEO_SIZE[0] // 2]
-            else:
-                frame = self.frame[:, self.VIDEO_SIZE[0] // 2:]
-            frame = cv2.blur(frame, (3, 3))
-            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            self.data[player_id]['last_pos'] = self.data[player_id]['pos']
-            if len(self.data[player_id]['vel']) > 4:
-                self.data[player_id]['vel'].pop(0)
-            mask = cv2.inRange(hsv, self.data[player_id]['lower'], self.data[player_id]['upper'])
-            kernel = np.ones((5, 5), np.uint8)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-            mask = cv2.medianBlur(mask, 5)
-
+            hsv = self.filter_frame(player_id)
+            self.refresh_player_position(player_id)
+            mask = self.get_mask(hsv, player_id)
             contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             maximumArea = 0
             bestContour = None
@@ -134,6 +141,9 @@ class VideoCapture:
             else:
                 self.data[player_id]['vel'].append((0, 0))
                 # self.data[player_id]['vel'] = (0, 0)
+
+    def get_players_positions(self, frame):
+        pass
 
     def start_capture(self):
         """
@@ -180,14 +190,14 @@ class VideoCapture:
         :return: (vx, vy) or (vx1, vy1), (vx2, vy2)
         """
         p1_vel = (
-        sum([x[0] for x in self.data[self.player.player_id]['vel']]) / len(self.data[self.player.player_id]['vel']),
-        sum([x[1] for x in self.data[self.player.player_id]['vel']]) / len(self.data[self.player.player_id]['vel']))
+            sum([x[0] for x in self.data[self.player.player_id]['vel']]) / len(self.data[self.player.player_id]['vel']),
+            sum([x[1] for x in self.data[self.player.player_id]['vel']]) / len(self.data[self.player.player_id]['vel']))
         # print self.data[self.player.player_id]['vel'], self.data[self.player2.player_id]['vel']
         if self.player2:
             p2_vel = (sum([x[0] for x in self.data[self.player2.player_id]['vel']]) / len(
-                    self.data[self.player2.player_id]['vel']),
+                self.data[self.player2.player_id]['vel']),
                       sum([x[1] for x in self.data[self.player2.player_id]['vel']]) / len(
-                              self.data[self.player2.player_id]['vel']))
+                          self.data[self.player2.player_id]['vel']))
             # print p1_vel, p2_vel
             # return self.data[self.player.player_id]['vel'], self.data[self.player2.player_id]['vel']
             return p1_vel, p2_vel

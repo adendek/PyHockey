@@ -9,10 +9,8 @@ from data.Player import Player
 from data.Player import TooManyPointsException
 from data.ScoreBoard import GameTime
 from data.ScoreBoard import OutOfGameTimeException
-
 from data.ScoreBoard import ScoreBoard
 from data.VideoCapture import VideoCapture
-from data.VideoCapture2 import VideoCapture2
 from Logger import Logger
 
 
@@ -68,6 +66,7 @@ class Game(object):
         self.video.start_capture()
         self.video.start_image_processing(self.players[0])
         self.video.start_image_processing(self.players[1])
+        #self.video.get_players_positions()
         # self.video.restart_capture()
 
         Logger.info("GAME INIT: Starting game loop...")
