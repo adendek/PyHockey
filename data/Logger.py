@@ -1,17 +1,18 @@
 import logging
 import os
 
+
 def make_logger(name, level, format):
-        logger = logging.getLogger(name)
-        logger.setLevel(level)
-        handler = logging.FileHandler(os.path.join('./logs/', name + '.log'), 'w')
-        formatter = logging.Formatter(format)
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        return logger
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    handler = logging.FileHandler(os.path.join('./logs/', name + '.log'), 'w')
+    formatter = logging.Formatter(format)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
+
 
 class Logger:
-
     _errlog = make_logger('ERROR', logging.ERROR, '%(asctime)s - %(name)s  - %(message)s')
     _warnlog = make_logger('WARNING', logging.WARNING, '%(asctime)s - %(name)s  - %(message)s')
     _infolog = make_logger('INFO', logging.INFO, '%(asctime)s - %(name)s  - %(message)s')
@@ -35,4 +36,3 @@ class Logger:
 
     def __init__(self):
         pass
-

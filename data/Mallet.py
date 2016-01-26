@@ -1,11 +1,12 @@
 import pygame
-from data.DrawableInterface import Drawable
-from data.MalletInterface import MalletInterface
-from data.Kinematics import PhysicsObject
+
 from Logger import Logger
+from data.DrawableInterface import Drawable
+from data.Kinematics import PhysicsObject
+from data.MalletInterface import MalletInterface
+
 
 class Mallet(MalletInterface, PhysicsObject, Drawable):
-
     def __init__(self, radius, pos_x, pos_y, mass, player, borders):
         """
         Initialize Mallet object
@@ -22,7 +23,6 @@ class Mallet(MalletInterface, PhysicsObject, Drawable):
         PhysicsObject.__init__(self, pos_x, pos_y, mass, radius, borders)
         self._player = player
         self.load_image()
-
 
     @property
     def image(self):
@@ -79,7 +79,7 @@ class Mallet(MalletInterface, PhysicsObject, Drawable):
         else:
             Logger.error("MALLET: Invalid value for player (" + self._player.playerColor + ")")
             raise ValueError('Invalid value for player (' + self._player.playerColor + ')')
-        self._image = pygame.transform.scale(pygame.image.load(image), (int(2*self.radius), int(2*self.radius)))
+        self._image = pygame.transform.scale(pygame.image.load(image), (int(2 * self.radius), int(2 * self.radius)))
 
     def print_properties(self):
         print self.velocity

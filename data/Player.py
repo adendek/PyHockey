@@ -1,6 +1,8 @@
 from __future__ import division
-from Mallet import Mallet
+
 from Logger import Logger
+from Mallet import Mallet
+
 
 class TooManyPointsException(Exception):
     """Raised when player has more points than he can according to rules."""
@@ -16,7 +18,7 @@ class Player:
     PLAYER_BLUE = 2
 
     # TODO: Decide value of max points in sth like game rules, probably implemented in another class
-    MAX_POINTS = 10     # temp
+    MAX_POINTS = 10  # temp
 
     def __init__(self, player_id, pitch):
         """
@@ -28,13 +30,13 @@ class Player:
         if player_id == Player.PLAYER_RED:
             Logger.info("PLAYER: initializing PLAYER_RED")
             self.playerColor = Player.PLAYER_RED
-            self._borders = ((pitch.i_min, (pitch.i_min+pitch.i_max)/2), (pitch.j_min, pitch.j_max))
+            self._borders = ((pitch.i_min, (pitch.i_min + pitch.i_max) / 2), (pitch.j_min, pitch.j_max))
             self._center = (200, 300)
-            self._goal_to_score = pitch.get_right_goal() #opponent's goal
+            self._goal_to_score = pitch.get_right_goal()  # opponent's goal
         else:
             Logger.info("PLAYER: initializing PLAYER_BLUE")
             self.playerColor = Player.PLAYER_BLUE
-            self._borders = (((pitch.i_min+pitch.i_max)/2, pitch.i_max), (pitch.j_min, pitch.j_max))
+            self._borders = (((pitch.i_min + pitch.i_max) / 2, pitch.i_max), (pitch.j_min, pitch.j_max))
             self._center = (600, 300)
             self._goal_to_score = pitch.get_left_goal()
 
@@ -98,7 +100,6 @@ class Player:
         self._points += 1
         if self._points >= self.MAX_POINTS:
             raise TooManyPointsException
-
 
     def printTooManyPointsInfo(self):
         print("Player " + self.name + " has won scoring " + str(self.MAX_POINTS) + " points.")

@@ -1,12 +1,11 @@
-from abc import ABCMeta, abstractmethod, abstractproperty
+from abc import abstractmethod, abstractproperty
+
 from data.DrawableInterface import Drawable
 
 
 class MalletInterface(Drawable):
-
     def __init__(self):
         self._player = None
-
 
     @abstractproperty
     def pos(self):
@@ -39,7 +38,3 @@ class MalletInterface(Drawable):
     @abstractmethod
     def load_image(self):
         pass
-
-
-
-

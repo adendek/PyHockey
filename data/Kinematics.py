@@ -114,9 +114,9 @@ class PhysicsObject(object):
             obj_vec_side = object._vel - obj_vec_to
 
             after_vec_to = (vec_to * (self._mass - object._mass) + (2 * object._mass * obj_vec_to)) / (
-            self._mass + object._mass)
+                self._mass + object._mass)
             after_obj_vec_to = (obj_vec_to * (object._mass - self._mass) + (2 * self._mass * vec_to)) / (
-            self._mass + object._mass)
+                self._mass + object._mass)
 
             # Change velocity only if it is Disc
             if isinstance(self, Disc):

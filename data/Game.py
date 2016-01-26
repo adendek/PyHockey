@@ -100,28 +100,18 @@ class Game(object):
                 # self.done = True
                 self.playing = False
 
-            # self.players[0].mallet.vel.state, self.players[1].mallet.vel.state = self.video.vel
-
-            # pos = self.video.pos
             # currently done for synchronization purposes of KeyboardControls players positions with Game players positions
             self.controls.p1 = (self.players[0].mallet.pos.x, self.players[0].mallet.pos.y)
             self.controls.p2 = (self.players[1].mallet.pos.x, self.players[1].mallet.pos.y)
             pos = self.controls.get_players_positions()
-            # analyse next frame
-            # p1_data, p2_data = self.video.getNewPositions()
 
+            # calculate velocities, it should not be here
             self.players[0].mallet.vel.state, self.players[1].mallet.vel.state = (pos[0][0] - self.players[
                 0].mallet.pos.x, pos[0][1] - self.players[0].mallet.pos.y), (pos[1][0] - self.players[1].mallet.pos.x,
                                                                              pos[1][1] - self.players[1].mallet.pos.y)
 
             self.players[0].mallet.move_to(pos[0][0], pos[0][1])
             self.players[1].mallet.move_to(pos[1][0], pos[1][1])
-
-            # update positions and velocities
-            # self.players[0].mallet.vel.state, self.players[1].mallet.vel.state = p1_data[1], p2_data[1]
-            #
-            # self.players[0].mallet.move_to(p1_data[0][0], p1_data[0][1])
-            # self.players[1].mallet.move_to(p2_data[0][0], p2_data[0][1])
 
             # reset screen
             self.screen.fill(background)
