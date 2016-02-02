@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from data.Player import Player
 from AbstractVideoCapture import AbstractVideoCapture
-
+from data.MarkerTracker import MarkerTracker
 
 class VideoCapture(AbstractVideoCapture):
     def __init__(self, player, player2):
@@ -47,23 +47,23 @@ class VideoCapture(AbstractVideoCapture):
             self.data[player.playerColor]['upper'] = np.array([105, 224, 154], dtype=np.uint8)
             self.data[player.playerColor]['circle_color'] = (0, 0, 255)
 
-    def convert_position(self, player_id, tup):
-        """
-        Convert coordinates to pygame proper one
-        :param player_id:
-        :param tup: (x, y)
-        :return:
-        """
-        # left side
-        if player_id == Player.PLAYER_RED:
-            x = tup[0] * self.GAME_SIZE[0] / self.VIDEO_SIZE[0]
-            y = tup[1] * self.GAME_SIZE[1] / self.VIDEO_SIZE[1]
-        # right side
-        else:
-            x = tup[0] * self.GAME_SIZE[0] / self.VIDEO_SIZE[0] + self.GAME_SIZE[0] / 2
-            y = tup[1] * self.GAME_SIZE[1] / self.VIDEO_SIZE[1]
-
-        return int(x), int(y)
+    # def convert_position(self, player_id, tup):
+    #     """
+    #     Convert coordinates to pygame proper one
+    #     :param player_id:
+    #     :param tup: (x, y)
+    #     :return:
+    #     """
+    #     # left side
+    #     if player_id == Player.PLAYER_RED:
+    #         x = tup[0] * self.GAME_SIZE[0] / self.VIDEO_SIZE[0]
+    #         y = tup[1] * self.GAME_SIZE[1] / self.VIDEO_SIZE[1]
+    #     # right side
+    #     else:
+    #         x = tup[0] * self.GAME_SIZE[0] / self.VIDEO_SIZE[0] + self.GAME_SIZE[0] / 2
+    #         y = tup[1] * self.GAME_SIZE[1] / self.VIDEO_SIZE[1]
+    #
+    #     return int(x), int(y)
 
     def get_image(self):
         """
@@ -85,62 +85,62 @@ class VideoCapture(AbstractVideoCapture):
         for player_id in self.data.keys():
             cv2.circle(self.frame, self.data[player_id]['cam_pos'], 10, self.data[player_id]['circle_color'], 2)
 
-    def filter_frame(self, player_id):
-        if player_id == Player.PLAYER_RED:
-            frame = self.frame[:, :self.VIDEO_SIZE[0] // 2]
-        else:
-            frame = self.frame[:, self.VIDEO_SIZE[0] // 2:]
-        frame = cv2.blur(frame, (3, 3))
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        return hsv
+    # def filter_frame(self, player_id):
+    #     if player_id == Player.PLAYER_RED:
+    #         frame = self.frame[:, :self.VIDEO_SIZE[0] // 2]
+    #     else:
+    #         frame = self.frame[:, self.VIDEO_SIZE[0] // 2:]
+    #     frame = cv2.blur(frame, (3, 3))
+    #     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    #     return hsv
 
-    def refresh_player_position(self, player_id):
-        self.data[player_id]['last_pos'] = self.data[player_id]['pos']
-        if len(self.data[player_id]['vel']) > 4:
-            self.data[player_id]['vel'].pop(0)
+    # def refresh_player_position(self, player_id):
+    #     self.data[player_id]['last_pos'] = self.data[player_id]['pos']
+    #     if len(self.data[player_id]['vel']) > 4:
+    #         self.data[player_id]['vel'].pop(0)
 
-    def get_mask(self, hsv, player_id):
-        mask = cv2.inRange(hsv, self.data[player_id]['lower'], self.data[player_id]['upper'])
-        kernel = np.ones((5, 5), np.uint8)
-        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-        mask = cv2.medianBlur(mask, 5)
-        return mask
+    # def get_mask(self, hsv, player_id):
+    #     mask = cv2.inRange(hsv, self.data[player_id]['lower'], self.data[player_id]['upper'])
+    #     kernel = np.ones((5, 5), np.uint8)
+    #     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    #     mask = cv2.medianBlur(mask, 5)
+    #     return mask
 
-    def get_players_data(self, player_id):
-        """
-        Loop which save position of colored objects.
-        :param player_id:
-        :return:
-        """
-        while not self._stop_image_processing.is_set():
-            if self.frame is None:
-                continue
-            hsv = self.filter_frame(player_id)
-            self.refresh_player_position(player_id)
-            mask = self.get_mask(hsv, player_id)
-            contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-            maximumArea = 0
-            bestContour = None
-            for contour in contours:
-                currentArea = cv2.contourArea(contour)
-                if currentArea > maximumArea:
-                    bestContour = contour
-                    maximumArea = currentArea
-
-            if bestContour is not None:
-                M = cv2.moments(bestContour)
-                x, y = int(M['m10'] / M['m00']), int(M['m01'] / M['m00'])
-                game_x, game_y = self.convert_position(player_id, (x, y))
-                if player_id == Player.PLAYER_BLUE:
-                    x += self.VIDEO_SIZE[0] // 2
-                self.data[player_id]['cam_pos'] = (x, y)
-                self.data[player_id]['pos'] = game_x, game_y
-                self.data[player_id]['vel'].append(((game_x - self.data[player_id]['last_pos'][0]),
-                                                    (game_y - self.data[player_id]['last_pos'][1])))
-                # self.data[player_id]['vel'] = (game_x - self.data[player_id]['last_pos'][0]), (game_y - self.data[player_id]['last_pos'][1])
-            else:
-                self.data[player_id]['vel'].append((0, 0))
-                # self.data[player_id]['vel'] = (0, 0)
+    # def get_players_data(self, player_id):
+    #     """
+    #     Loop which save position of colored objects.
+    #     :param player_id:
+    #     :return:
+    #     """
+    #     while not self._stop_image_processing.is_set():
+    #         if self.frame is None:
+    #             continue
+    #         hsv = self.filter_frame(player_id)
+    #         self.refresh_player_position(player_id)
+    #         mask = self.get_mask(hsv, player_id)
+    #         contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    #         maximumArea = 0
+    #         bestContour = None
+    #         for contour in contours:
+    #             currentArea = cv2.contourArea(contour)
+    #             if currentArea > maximumArea:
+    #                 bestContour = contour
+    #                 maximumArea = currentArea
+    #
+    #         if bestContour is not None:
+    #             M = cv2.moments(bestContour)
+    #             x, y = int(M['m10'] / M['m00']), int(M['m01'] / M['m00'])
+    #             game_x, game_y = self.convert_position(player_id, (x, y))
+    #             if player_id == Player.PLAYER_BLUE:
+    #                 x += self.VIDEO_SIZE[0] // 2
+    #             self.data[player_id]['cam_pos'] = (x, y)
+    #             self.data[player_id]['pos'] = game_x, game_y
+    #             self.data[player_id]['vel'].append(((game_x - self.data[player_id]['last_pos'][0]),
+    #                                                 (game_y - self.data[player_id]['last_pos'][1])))
+    #             # self.data[player_id]['vel'] = (game_x - self.data[player_id]['last_pos'][0]), (game_y - self.data[player_id]['last_pos'][1])
+    #         else:
+    #             self.data[player_id]['vel'].append((0, 0))
+    #             # self.data[player_id]['vel'] = (0, 0)
 
     def start_capture(self):
         """
@@ -154,7 +154,7 @@ class VideoCapture(AbstractVideoCapture):
         starting new thread - get_players_data
         :return:
         """
-        threading.Thread(target=self.get_players_data, args=(player.player_id,)).start()
+        threading.Thread(target=MarkerTracker.get_players_data, args=(player.player_id,)).start()
 
     def stop_capture(self):
         """
