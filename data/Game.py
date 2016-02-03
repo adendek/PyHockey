@@ -72,7 +72,7 @@ class Game(object):
         # self.video.restart_capture()
 
         Logger.info("GAME INIT: Initializing Game Controls...")
-        self.controls = KeyboardGameControls()
+        self.controls = KeyboardGameControls(self.players[0],self.players[1])
 
         Logger.info("GAME INIT: Starting game loop...")
         self.loop()
@@ -100,9 +100,6 @@ class Game(object):
                 # self.done = True
                 self.playing = False
 
-            # currently done for synchronization purposes of KeyboardControls players positions with Game players positions
-            self.controls.p1 = (self.players[0].mallet.pos.x, self.players[0].mallet.pos.y)
-            self.controls.p2 = (self.players[1].mallet.pos.x, self.players[1].mallet.pos.y)
             pos = self.controls.get_players_positions()
 
             # calculate velocities, it should not be here
