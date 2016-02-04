@@ -4,7 +4,7 @@ from AbstractMarkerTracker import AbstractMarkerTracker
 
 
 class MarkerTracker(AbstractMarkerTracker):
-    def __init__(self, frame):
+    def __init__(self):
         self.hsv = None
         self.player_id = ['player_red', 'player_blue']
         self.VIDEO_SIZE = (400, 300)
@@ -14,20 +14,22 @@ class MarkerTracker(AbstractMarkerTracker):
         self.p2 = (0, 0)
         for player in self.player_id:
             if player == 'player_blue':
-                halfframe = frame[:, self.VIDEO_SIZE[0] // 2:]
                 self.data['player_blue']['lower'] = np.array([90, 80, 80], dtype=np.uint8)
                 self.data['player_blue']['upper'] = np.array([110, 255, 255], dtype=np.uint8)
+            else:
+                self.data['player_red']['lower'] = np.array([0, 145, 100], dtype=np.uint8)
+                self.data['player_red']['upper'] = np.array([10, 210, 160], dtype=np.uint8)
+
+    def get_markers_positions(self, frame):
+        for player in self.player_id:
+            if player == 'player_blue':
+                halfframe = frame[:, self.VIDEO_SIZE[0] // 2:]
                 halfframe = cv2.blur(halfframe, (3, 3))
                 self.hsv[player] = cv2.cvtColor(halfframe, cv2.COLOR_BGR2HSV)
             else:
                 halfframe = frame[:, :self.VIDEO_SIZE[0] // 2]
-                self.data['player_red']['lower'] = np.array([21, 58, 28], dtype=np.uint8)
-                self.data['player_red']['upper'] = np.array([105, 224, 154], dtype=np.uint8)
                 halfframe = cv2.blur(halfframe, (3, 3))
                 self.hsv[player] = cv2.cvtColor(halfframe, cv2.COLOR_BGR2HSV)
-
-    def get_markers_positions(self, frame):
-        for player in self.player_id:
             mask = cv2.inRange(self.hsv[player], self.data[player]['lower'], self.data[player]['upper'])
             mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
             mask = cv2.medianBlur(mask, 5)
