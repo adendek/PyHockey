@@ -2,6 +2,10 @@ from data.controls.AbstractGameControls import AbstractGameControls
 
 
 class CameraGameControls(AbstractGameControls):
+    def __init__(self, videoCapture, markerTracker):
+        self._videoCapture = videoCapture
+        self._markerTracker = markerTracker
 
     def get_players_positions(self):
-        return self.p1, self.p2
+        frame = self._videoCapture.get_frame()
+        return self._markerTracker(frame)
