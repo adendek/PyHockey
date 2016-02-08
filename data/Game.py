@@ -30,7 +30,7 @@ class Game(object):
         Logger.info("GAME INIT: Initializing PyGame...")
         pg.init()
 
-        Logger.info("GAME INIT: Initializing  Game Control Options Display (%s)", str(size))
+        Logger.info("GAME INIT: Initializing  Game Control Options Display")
         self.screensize = (850, 300)
         self.screen = pg.display.set_mode(self.screensize)
         pg.display.set_caption("PyHockey")
@@ -52,12 +52,9 @@ class Game(object):
                     exit()
 
         Logger.info("GAME INIT: Initializing  Game Display (%s)", str(size))
-        pg.display.set_caption("PyHockey")
-
         os.environ["SDL_VIDEO_CENTERED"] = "True"
         self.screensize = (int(size[0]), int(size[1]))
         self.screen = pg.display.set_mode(self.screensize)
-        pg.display.flip()
         self.screen_rect = self.screen.get_rect()
         Logger.info("GAME INIT: Initializing clock and fps rate...")
 
