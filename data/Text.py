@@ -1,9 +1,9 @@
-from data.DrawableInterface import Drawable
 import pygame
+
+from data.DrawableInterface import Drawable
 
 
 class Text(Drawable):
-
     def __init__(self, size=15, fontname="monospace",
                  text="", color=pygame.Color("black"), position=(0, 0)):
         Drawable.__init__(self, None, None, position)
@@ -57,9 +57,3 @@ class Text(Drawable):
         self._font = pygame.font.SysFont(self._fontname, self._size)
         self._image = self._font.render(self._text, 1, self._color)
         screen.blit(self._image, (self._position[0], self._position[1]))
-
-
-
-
-
-

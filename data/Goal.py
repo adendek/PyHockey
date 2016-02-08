@@ -1,6 +1,7 @@
 __author__ = 'Asia'
 from Logger import Logger
 
+
 class WrongTypeException(Exception):
     """
     raised when the parameter is wrong type
@@ -19,6 +20,7 @@ class Goal:
     """
     class represent a goal on the Pitch
     """
+
     def __init__(self, x, y_center, width):
         """
         define constructor of class Goal. If the value will not be equal 'L' or 'R', the function raise the ValueError
@@ -43,10 +45,9 @@ class Goal:
         :param r: radius of disk
         :raise: WrongTypeException if i, j or r is not type of int, OutOfRangeException if disk is out of pitch
         """
-        if abs(i - self.i) < 1.2 * r  and self.j_min < j < self.j_max:
+        if abs(i - self.i) < 1.2 * r and self.j_min < j < self.j_max:
             Logger.debug("GOAL: in_goal returned True")
             return True
         else:
             Logger.debug("GOAL: in_goal returned False")
             return False
-

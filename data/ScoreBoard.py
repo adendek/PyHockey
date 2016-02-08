@@ -1,14 +1,17 @@
 from __future__ import division
+
 from datetime import datetime
-from data.Text import Text
-from data.Player import Player
-from data.DrawableInterface import Drawable
+
 import pygame as pg
+
+from data.DrawableInterface import Drawable
+from data.Player import Player
+from data.Text import Text
 
 
 class GameTime:
     # TODO: Decide value of max time in sth like game rules, probably implemented in another class
-    MAX_TIME = 1     # [minutes]
+    MAX_TIME = 1  # [minutes]
 
     startTime = datetime.now()
 
@@ -37,6 +40,7 @@ class OutOfGameTimeException(Exception):
 
 class ScoreBoard(Drawable):
     """Represents the board on which scores and time are displayed."""
+
     def __init__(self, player1, player2):
         Drawable.__init__(self, None, None, None)
         self._player1 = player1
@@ -50,12 +54,11 @@ class ScoreBoard(Drawable):
     def player2(self):
         return self._player2
 
-
     def displayScore(self, screen):
         if self._player1.points == Player.MAX_POINTS:
-            scores = [Text(color=pg.Color("red"), position=(25, 25), text= "Player 1 won. Game over!", size=50)]
+            scores = [Text(color=pg.Color("red"), position=(25, 25), text="Player 1 won. Game over!", size=50)]
         elif self._player2.points == Player.MAX_POINTS:
-            scores = [Text(color=pg.Color("blue"), position=(25, 25), text= "Player 2 won. Game over!", size=50)]
+            scores = [Text(color=pg.Color("blue"), position=(25, 25), text="Player 2 won. Game over!", size=50)]
         else:
             scores = [Text(color=pg.Color("red"), position=(25, 25), text=str(self._player1.points), size=50),
                       Text(color=pg.Color("blue"), position=(750, 25), text=str(self._player2.points), size=50)]
@@ -70,8 +73,9 @@ class ScoreBoard(Drawable):
         text.draw(screen)
 
     def displayTimeExceptionally(self, screen):
-        text = [Text(color=pg.Color("black"), position=(362, 100), text=str(GameTime.MAX_TIME).zfill(2) + ":00", size=25),
-                Text(color=pg.Color("black"), position=(280, 75), text="Game time is over!", size=25)]
+        text = [
+            Text(color=pg.Color("black"), position=(362, 100), text=str(GameTime.MAX_TIME).zfill(2) + ":00", size=25),
+            Text(color=pg.Color("black"), position=(280, 75), text="Game time is over!", size=25)]
         for t in text:
             t.draw(screen)
 
@@ -81,7 +85,3 @@ class ScoreBoard(Drawable):
         except OutOfGameTimeException:
             self.displayTimeExceptionally(screen)
         self.displayScore(screen)
-
-
-
-

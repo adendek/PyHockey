@@ -1,6 +1,8 @@
 from __future__ import division
+
 import cv2
 import numpy as np
+
 from AbstractMarkerTracker import AbstractMarkerTracker
 
 
@@ -14,10 +16,10 @@ class MarkerTracker(AbstractMarkerTracker):
         self.data = {'player_red': self.player_red, 'player_blue': self.player_blue}
         self.p1 = (0, 0)
         self.p2 = (0, 0)
-        self.player_blue.append(np.array([90, 80, 80], dtype=np.uint8)) #low hsv limit
-        self.player_blue.append(np.array([110, 255, 255], dtype=np.uint8)) #up hsv limit
-        self.player_red.append(np.array([21, 58, 28], dtype=np.uint8)) #low hsv limit
-        self.player_red.append(np.array([105, 224, 154], dtype=np.uint8)) #up hsv limit
+        self.player_blue.append(np.array([90, 80, 80], dtype=np.uint8))  # low hsv limit
+        self.player_blue.append(np.array([110, 255, 255], dtype=np.uint8))  # up hsv limit
+        self.player_red.append(np.array([21, 58, 28], dtype=np.uint8))  # low hsv limit
+        self.player_red.append(np.array([105, 224, 154], dtype=np.uint8))  # up hsv limit
 
     def get_markers_positions(self, frame):
         for player, limit in self.data.iteritems():
@@ -45,10 +47,12 @@ class MarkerTracker(AbstractMarkerTracker):
                 M = cv2.moments(bestContour)
                 x, y = int(M['m10'] / M['m00']), int(M['m01'] / M['m00'])
                 if player == 'player_blue':
-                    self.p2 = (int(x* self.GAME_SIZE[0] / self.VIDEO_SIZE[0] + self.GAME_SIZE[0] / 2), int(y* self.GAME_SIZE[1] / self.VIDEO_SIZE[1]))
+                    self.p2 = (int(x * self.GAME_SIZE[0] / self.VIDEO_SIZE[0] + self.GAME_SIZE[0] / 2),
+                               int(y * self.GAME_SIZE[1] / self.VIDEO_SIZE[1]))
                     x += self.VIDEO_SIZE[0] // 2
                     cv2.circle(frame, (int(x), int(y)), 10, (255, 0, 0), 2)
                 else:
-                    self.p1 = (int(x* self.GAME_SIZE[0] / self.VIDEO_SIZE[0]), int(y * self.GAME_SIZE[1] / self.VIDEO_SIZE[1]))
+                    self.p1 = (
+                    int(x * self.GAME_SIZE[0] / self.VIDEO_SIZE[0]), int(y * self.GAME_SIZE[1] / self.VIDEO_SIZE[1]))
                     cv2.circle(frame, (int(x), int(y)), 10, (0, 0, 255), 2)
         return self.p1, self.p2

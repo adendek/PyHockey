@@ -1,5 +1,7 @@
 from __future__ import division
+
 import cv2
+
 from AbstractVideoCapture import AbstractVideoCapture
 
 
@@ -10,5 +12,5 @@ class VideoCapture(AbstractVideoCapture):
 
     def get_frame(self):
         ret, frame = self.cap.read()
-        frame = cv2.resize(cv2.flip(frame, 1), self.VIDEO_SIZE)#vertical flip+ resize
+        frame = cv2.resize(cv2.flip(frame, 1), self.VIDEO_SIZE)  # vertical flip+ resize
         return frame
