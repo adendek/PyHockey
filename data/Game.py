@@ -30,13 +30,34 @@ class Game(object):
         Logger.info("GAME INIT: Initializing PyGame...")
         pg.init()
 
-        Logger.info("GAME INIT: Initializing Display (%s)", str(size))
+        Logger.info("GAME INIT: Initializing  Game Control Options Display (%s)", str(size))
+        self.screensize = (850, 300)
+        self.screen = pg.display.set_mode(self.screensize)
         pg.display.set_caption("PyHockey")
-        self.screensize = (int(size[0]), int(size[1]))
+        self.screen.fill((0, 0, 0))
+        myfont = pg.font.Font(None, 25)
+        label = myfont.render(
+            "Press ENTER to play game with keybord, or press v to use video control", 1, (255, 255, 0)
+        )
+        self.screen.blit(label, (100, 100))
+        pg.display.flip()
+        self.gamecontrol = 0
+        while  self.gamecontrol == 0:
+            for event in pg.event.get():
+                if event.type == KEYDOWN and event.key == K_RETURN:
+                    self.gamecontrol = 1
+                if event.type == KEYDOWN and event.key == K_v:
+                    self.gamecontrol = 2
+                if event.type == QUIT:
+                    exit()
+
+        Logger.info("GAME INIT: Initializing  Game Display (%s)", str(size))
+        pg.display.set_caption("PyHockey")
 
         os.environ["SDL_VIDEO_CENTERED"] = "True"
+        self.screensize = (int(size[0]), int(size[1]))
         self.screen = pg.display.set_mode(self.screensize)
-
+        pg.display.flip()
         self.screen_rect = self.screen.get_rect()
         Logger.info("GAME INIT: Initializing clock and fps rate...")
 
@@ -75,8 +96,10 @@ class Game(object):
         # self.video.restart_capture()
 
         Logger.info("GAME INIT: Initializing Game Controls...")
-        self.controls = KeyboardGameControls(self.players[0],self.players[1])
-      #  self.controls=CameraGameControls(self.video, self.markerTracker)
+        if self.gamecontrol == 1:
+            self.controls = KeyboardGameControls(self.players[0],self.players[1])
+        if self.gamecontrol == 2:
+            self.controls=CameraGameControls(self.video, self.markerTracker)
 
         Logger.info("GAME INIT: Starting game loop...")
         self.loop()
