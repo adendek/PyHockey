@@ -75,8 +75,8 @@ class Game(object):
         # self.video.restart_capture()
 
         Logger.info("GAME INIT: Initializing Game Controls...")
-        #self.controls = KeyboardGameControls(self.players[0],self.players[1])
-        self.controls = CameraGameControls(self.video, self.markerTracker)
+        self.controls = KeyboardGameControls(self.players[0],self.players[1])
+
         Logger.info("GAME INIT: Starting game loop...")
         self.loop()
         Logger.info("GAME INIT: Game loop ended, stopping video capture...")
