@@ -4,12 +4,17 @@ from data.controls.AbstractGameControls import AbstractGameControls
 
 
 class KeyboardGameControls(AbstractGameControls):
-    def __init__(self):
+    def __init__(self, player1, player2):
+        self.player1 = player1
+        self.player2 = player2
         self.p1 = (200, 200)
         self.p2 = (600, 400)
 
     def get_players_positions(self):
         d = 10
+
+        self.p1 = (self.player1.mallet.pos.x, self.player1.mallet.pos.y)
+        self.p2 = (self.player2.mallet.pos.x, self.player2.mallet.pos.y)
 
         # red player controls
         if pg.key.get_pressed()[pg.K_w]:

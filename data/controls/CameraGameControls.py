@@ -8,4 +8,4 @@ class CameraGameControls(AbstractGameControls):
 
     def get_players_positions(self):
         frame = self._videoCapture.get_frame()
-        return self._markerTracker(frame)
+        return self._markerTracker.get_markers_positions(frame)

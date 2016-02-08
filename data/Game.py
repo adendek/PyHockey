@@ -7,6 +7,7 @@ from pygame.locals import *
 
 from Logger import Logger
 from data.Disc import Disc
+from data.MarkerTracker import MarkerTracker
 from data.Pitch import Pitch
 from data.Player import Player
 from data.Player import TooManyPointsException
@@ -14,6 +15,7 @@ from data.ScoreBoard import GameTime
 from data.ScoreBoard import OutOfGameTimeException
 from data.ScoreBoard import ScoreBoard
 from data.VideoCapture import VideoCapture
+from data.controls.CameraGameControls import CameraGameControls
 from data.controls.KeyboardGameControls import KeyboardGameControls
 
 
@@ -63,7 +65,8 @@ class Game(object):
         self.drawables.append(self.scoreboard)
 
         Logger.info("GAME INIT: Initializing Video Capture...")
-        self.video = VideoCapture(self.players[0], self.players[1])
+        self.video = VideoCapture()
+        self.markerTracker = MarkerTracker()
         # self.video = VideoCapture2(size)
         # self.video.start_capture()
         # self.video.start_image_processing(self.players[0])
@@ -72,8 +75,8 @@ class Game(object):
         # self.video.restart_capture()
 
         Logger.info("GAME INIT: Initializing Game Controls...")
-        self.controls = KeyboardGameControls()
-
+        #self.controls = KeyboardGameControls(self.players[0],self.players[1])
+        self.controls = CameraGameControls(self.video, self.markerTracker)
         Logger.info("GAME INIT: Starting game loop...")
         self.loop()
         Logger.info("GAME INIT: Game loop ended, stopping video capture...")
@@ -100,9 +103,6 @@ class Game(object):
                 # self.done = True
                 self.playing = False
 
-            # currently done for synchronization purposes of KeyboardControls players positions with Game players positions
-            self.controls.p1 = (self.players[0].mallet.pos.x, self.players[0].mallet.pos.y)
-            self.controls.p2 = (self.players[1].mallet.pos.x, self.players[1].mallet.pos.y)
             pos = self.controls.get_players_positions()
 
             # calculate velocities, it should not be here
