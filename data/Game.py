@@ -30,7 +30,7 @@ class Game(object):
         Logger.info("GAME INIT: Initializing PyGame...")
         pg.init()
 
-        Logger.info("GAME INIT: Initializing  Game Control Options Display")
+        Logger.info("GAME INIT: Initializing Game Control Options Display")
         self.screensize = (850, 300)
         self.screen = pg.display.set_mode(self.screensize)
         pg.display.set_caption("PyHockey")
