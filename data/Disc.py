@@ -1,11 +1,11 @@
 import pygame
 
+from Logger import Logger
 from data.DrawableInterface import Drawable
 from data.Kinematics import *
-from Logger import Logger
+
 
 class Disc(PhysicsObject, Drawable):
-
     PICTURE_PATH = "resources/graphics/disc.png"
 
     def __init__(self, init_x, init_y, mass, radius, borders):
@@ -23,8 +23,6 @@ class Disc(PhysicsObject, Drawable):
         self._init_y = init_y
         image = self.load_image(radius)
         Drawable.__init__(self, image, None, Vector(init_x, init_y))
-
-
 
     @property
     def image(self):
@@ -108,7 +106,7 @@ class Disc(PhysicsObject, Drawable):
 
     def load_image(self, radius):
         Logger.debug('DISC: loading image (radius=%s), PICTURE_PATH = %s', str(radius), str(Disc.PICTURE_PATH))
-        return pygame.transform.scale(pygame.image.load(Disc.PICTURE_PATH), (int(2*radius), int(2*radius)))
+        return pygame.transform.scale(pygame.image.load(Disc.PICTURE_PATH), (int(2 * radius), int(2 * radius)))
 
     @vel.setter
     def vel(self, vel):

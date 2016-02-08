@@ -37,12 +37,12 @@ class Game(object):
         self.screen.fill((0, 0, 0))
         myfont = pg.font.Font(None, 25)
         label = myfont.render(
-            "Press ENTER to play game with keybord, or press v to use video control", 1, (255, 255, 0)
+            "Press ENTER to play game with keyboard, or press V to use video control", 1, (255, 255, 0)
         )
         self.screen.blit(label, (100, 100))
         pg.display.flip()
         self.gamecontrol = 0
-        while  self.gamecontrol == 0:
+        while self.gamecontrol == 0:
             for event in pg.event.get():
                 if event.type == KEYDOWN and event.key == K_RETURN:
                     self.gamecontrol = 1
@@ -85,24 +85,16 @@ class Game(object):
         Logger.info("GAME INIT: Initializing Video Capture...")
         self.video = VideoCapture()
         self.markerTracker = MarkerTracker()
-        # self.video = VideoCapture2(size)
-        # self.video.start_capture()
-        # self.video.start_image_processing(self.players[0])
-        # self.video.start_image_processing(self.players[1])
-        # self.video.get_players_positions()
-        # self.video.restart_capture()
 
         Logger.info("GAME INIT: Initializing Game Controls...")
         if self.gamecontrol == 1:
-            self.controls = KeyboardGameControls(self.players[0],self.players[1])
+            self.controls = KeyboardGameControls(self.players[0], self.players[1])
         if self.gamecontrol == 2:
-            self.controls=CameraGameControls(self.video, self.markerTracker)
+            self.controls = CameraGameControls(self.video, self.markerTracker)
 
         Logger.info("GAME INIT: Starting game loop...")
         self.loop()
-        Logger.info("GAME INIT: Game loop ended, stopping video capture...")
-        # self.video.stop_image_processing()
-        # self.video.stop_capture()
+        Logger.info("GAME INIT: Game loop ended")
         Logger.info("GAME INIT: Exiting")
 
     def loop(self):

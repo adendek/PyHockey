@@ -63,7 +63,6 @@ class VideoCapture2():
             square = (int(c[0] - c[2]), int(c[1] - c[2]), int(2 * c[2]), int(2 * c[2]))
             roi = frame[square[1]:(square[1] + square[2]), square[0]:(square[0] + square[2]), :]
 
-
             # cv2.rectangle(frame, (square[0], square[1]), (square[0] + square[2], square[1] + square[2]), 255, 3)
 
             # cv2.imshow('help2', frame)
