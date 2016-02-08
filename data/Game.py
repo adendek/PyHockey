@@ -76,6 +76,7 @@ class Game(object):
 
         Logger.info("GAME INIT: Initializing Game Controls...")
         self.controls = KeyboardGameControls(self.players[0],self.players[1])
+      #  self.controls=CameraGameControls(self.video, self.markerTracker)
 
         Logger.info("GAME INIT: Starting game loop...")
         self.loop()
