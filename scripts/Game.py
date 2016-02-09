@@ -15,7 +15,7 @@ from scripts.gamecomponents.Player import TooManyPointsException
 from scripts.gamecomponents.ScoreBoard import GameTime
 from scripts.gamecomponents.ScoreBoard import OutOfGameTimeException
 from scripts.gamecomponents.ScoreBoard import ScoreBoard
-from scripts.tracking.MarkerTracker import MarkerTracker
+from scripts.tracking.NaiveMarkerTracker import NaiveMarkerTracker
 from scripts.videocapture.VideoCapture import VideoCapture
 
 
@@ -84,7 +84,7 @@ class Game(object):
 
         Logger.info("GAME INIT: Initializing Video Capture...")
         self.video = VideoCapture()
-        self.markerTracker = MarkerTracker()
+        self.markerTracker = NaiveMarkerTracker()
 
         Logger.info("GAME INIT: Initializing Game Controls...")
         if self.gamecontrol == 1:
@@ -93,6 +93,7 @@ class Game(object):
             self.controls = CameraGameControls(self.video, self.markerTracker)
 
         Logger.info("GAME INIT: Starting game loop...")
+        GameTime.startMeasuring()
         self.loop()
         Logger.info("GAME INIT: Game loop ended")
         Logger.info("GAME INIT: Exiting")
