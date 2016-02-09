@@ -11,6 +11,7 @@ class NaiveMarkerTracker(AbstractMarkerTracker):
         cv2.circle(frame, (int(p1[0]), int(p1[1])), 10, (0, 0, 255), 2)
         cv2.circle(frame, (int(p2[0]), int(p2[1])), 10, (255, 0, 0), 2)
         cv2.imshow('Frame preview', frame)
+        cv2.waitKey(1) & 0xFF
 
         # transform to game coordinates
         p1 = (p1[0] * 2, p1[1] * 2)
