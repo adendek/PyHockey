@@ -3,8 +3,8 @@ import unittest
 
 from mock import Mock
 
-from data.Kinematics import PhysicsObject
-from data.Vector import Vector
+from scripts.gamecomponents.Kinematics import PhysicsObject
+from scripts.gamecomponents.Vector import Vector
 
 
 class TestPhysicsObject(unittest.TestCase):
@@ -33,7 +33,7 @@ class TestPhysicsObject(unittest.TestCase):
 
     def test_correct_position_in_border(self):
         for i in range(0, 1000):
-            from data.Disc import Disc
+            from scripts.gamecomponents.Disc import Disc
             Disc.load_image = Mock()
             po = Disc(random.randint(self.MIN_RANDOM_POSITION, self.MAX_RANDOM_POSITION),
                       random.randint(self.MIN_RANDOM_POSITION, self.MAX_RANDOM_POSITION), 1,
@@ -48,8 +48,8 @@ class TestPhysicsObject(unittest.TestCase):
                             and po._pos.y + po._radius <= ymax)
 
     def test_correct_position_post_collision(self):
-        from data.Mallet import Mallet
-        from data.Disc import Disc
+        from scripts.gamecomponents.Mallet import Mallet
+        from scripts.gamecomponents.Disc import Disc
 
         mock = Mock()
         mock.playerColor = 1

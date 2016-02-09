@@ -1,6 +1,6 @@
 from abc import abstractmethod, abstractproperty
 
-from data.DrawableInterface import Drawable
+from scripts.gamecomponents.DrawableInterface import Drawable
 
 
 class MalletInterface(Drawable):

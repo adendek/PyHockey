@@ -1,6 +1,6 @@
-from data import ScoreBoard
-from data import Player
 import time
+
+from scripts.gamecomponents import Player, ScoreBoard
 
 pl1 = Player.Player(1, 0)
 pl2 = Player.Player(2, 0)
@@ -31,4 +31,3 @@ while n < 15:
             pl2.printTooManyPointsInfo()
     sb.display()
     n += 1
-

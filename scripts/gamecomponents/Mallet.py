@@ -1,9 +1,9 @@
 import pygame
 
-from Logger import Logger
-from data.DrawableInterface import Drawable
-from data.Kinematics import PhysicsObject
-from data.MalletInterface import MalletInterface
+from scripts.Logger import Logger
+from scripts.gamecomponents.DrawableInterface import Drawable
+from scripts.gamecomponents.Kinematics import PhysicsObject
+from scripts.gamecomponents.MalletInterface import MalletInterface
 
 
 class Mallet(MalletInterface, PhysicsObject, Drawable):
@@ -53,7 +53,7 @@ class Mallet(MalletInterface, PhysicsObject, Drawable):
         self.vel.angle = d
 
     def move_to(self, x, y):
-        from data.Kinematics import Vector
+        from scripts.gamecomponents.Kinematics import Vector
         Logger.debug("MALLET: move_to(%s,%s) pos before =%s", str(x), str(y), str(self._pos))
         move_vector = Vector(x, y) - self._pos
         if move_vector.length > PhysicsObject.MAX_MALLET_VELOCITY:

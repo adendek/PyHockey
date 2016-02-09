@@ -1,4 +1,4 @@
-from Logger import Logger
+from scripts.Logger import Logger
 
 
 class Drawable:

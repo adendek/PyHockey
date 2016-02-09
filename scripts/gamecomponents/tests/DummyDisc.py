@@ -1,11 +1,11 @@
 __author__ = 'michal'
 
-from data.Kinematics import *
+from scripts.gamecomponents.Kinematics import *
 
 
 class DummyDisc(PhysicsObject):
-    #Actually, i'm not sure what whether it is sth wrong with loading image or
-    #with my settings.
+    # Actually, i'm not sure what whether it is sth wrong with loading image or
+    # with my settings.
     """
     Disc class - version without image.
     """

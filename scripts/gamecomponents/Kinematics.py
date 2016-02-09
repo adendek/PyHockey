@@ -1,7 +1,7 @@
 from __future__ import division
 
-from Logger import Logger
-from data.Vector import Vector
+from scripts.Logger import Logger
+from scripts.gamecomponents.Vector import Vector
 
 
 class PhysicsObject(object):
@@ -74,8 +74,8 @@ class PhysicsObject(object):
     # TODO: Add common move_to and move methods for mallet and disc
 
     def apply_speed_limit(self):
-        from data.Disc import Disc
-        from data.Mallet import Mallet
+        from scripts.gamecomponents.Disc import Disc
+        from scripts.gamecomponents.Mallet import Mallet
         Logger.debug("KINEMATICS: apply_speed_limit MAX_DISC_VELOCITY=%s MAX_MALLET_VELOCITY=%s vel=%s",
                      str(self.MAX_DISC_VELOCITY), str(self.MAX_MALLET_VELOCITY), str(self._vel.length))
         if isinstance(self, Disc) and self._vel.length > self.MAX_DISC_VELOCITY:
@@ -87,7 +87,7 @@ class PhysicsObject(object):
 
     # TODO: Add unittests
     def border_collision(self, axis):
-        from data.Disc import Disc
+        from scripts.gamecomponents.Disc import Disc
         Logger.debug("KINEMATICS: border_collision axis=%s _vel=%s", str(axis), str(self._vel))
         if isinstance(self, Disc):
             if axis == 'x':
@@ -102,7 +102,7 @@ class PhysicsObject(object):
 
     # TODO: Add unittests
     def circle_collision(self, object):
-        from data.Disc import Disc
+        from scripts.gamecomponents.Disc import Disc
         if self._pos.get_distance(object.pos) <= self._radius + object.radius:
             Logger.debug("KINEMATICS: border_collision distance=%s self.radius=%s object.radius=%s",
                          str(self._pos.get_distance(object.pos)), str(self._radius), str(object.radius))

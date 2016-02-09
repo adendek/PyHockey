@@ -3,7 +3,7 @@ from __future__ import division
 import cv2
 import numpy as np
 
-from AbstractMarkerTracker import AbstractMarkerTracker
+from scripts.tracking.AbstractMarkerTracker import AbstractMarkerTracker
 
 
 class MarkerTracker(AbstractMarkerTracker):

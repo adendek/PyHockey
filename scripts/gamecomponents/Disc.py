@@ -1,8 +1,7 @@
 import pygame
 
-from Logger import Logger
-from data.DrawableInterface import Drawable
-from data.Kinematics import *
+from scripts.gamecomponents.DrawableInterface import Drawable
+from scripts.gamecomponents.Kinematics import *
 
 
 class Disc(PhysicsObject, Drawable):

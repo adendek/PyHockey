@@ -1,5 +1,5 @@
 __author__ = 'Asia'
-from Logger import Logger
+from scripts.Logger import Logger
 
 
 class WrongTypeException(Exception):

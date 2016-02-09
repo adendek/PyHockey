@@ -1,4 +1,4 @@
-from data.controls.AbstractGameControls import AbstractGameControls
+from scripts.controls.AbstractGameControls import AbstractGameControls
 
 
 class CameraGameControls(AbstractGameControls):

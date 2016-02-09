@@ -2,7 +2,7 @@ from __future__ import division
 
 import cv2
 
-from AbstractVideoCapture import AbstractVideoCapture
+from scripts.videocapture.AbstractVideoCapture import AbstractVideoCapture
 
 
 class VideoCapture(AbstractVideoCapture):

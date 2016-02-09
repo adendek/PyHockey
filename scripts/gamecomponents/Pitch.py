@@ -1,14 +1,14 @@
 import pygame
 
-from data.DrawableInterface import Drawable
+from scripts.gamecomponents.DrawableInterface import Drawable
 
 __author__ = 'Asia'
 
-from Goal import Goal
-from Disc import Disc
-from Mallet import Mallet
-from Kinematics import Vector
-from Logger import Logger
+from scripts.gamecomponents.Goal import Goal
+from scripts.gamecomponents.Disc import Disc
+from scripts.gamecomponents.Mallet import Mallet
+from scripts.gamecomponents.Kinematics import Vector
+from scripts.Logger import Logger
 
 
 class WrongTypeException(Exception):

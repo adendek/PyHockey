@@ -3,8 +3,8 @@ from __future__ import absolute_import
 import math
 import unittest
 
-from data.tests.DummyDisc import DummyDisc
-from data.Vector import Vector
+from scripts.gamecomponents.Vector import Vector
+from scripts.gamecomponents.tests import DummyDisc
 
 
 class TestDisc(unittest.TestCase):

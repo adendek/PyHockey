@@ -6,17 +6,17 @@ import pygame as pg
 from pygame.locals import *
 
 from Logger import Logger
-from data.Disc import Disc
-from data.MarkerTracker import MarkerTracker
-from data.Pitch import Pitch
-from data.Player import Player
-from data.Player import TooManyPointsException
-from data.ScoreBoard import GameTime
-from data.ScoreBoard import OutOfGameTimeException
-from data.ScoreBoard import ScoreBoard
-from data.VideoCapture import VideoCapture
-from data.controls.CameraGameControls import CameraGameControls
-from data.controls.KeyboardGameControls import KeyboardGameControls
+from scripts.controls.CameraGameControls import CameraGameControls
+from scripts.controls.KeyboardGameControls import KeyboardGameControls
+from scripts.gamecomponents.Disc import Disc
+from scripts.gamecomponents.Pitch import Pitch
+from scripts.gamecomponents.Player import Player
+from scripts.gamecomponents.Player import TooManyPointsException
+from scripts.gamecomponents.ScoreBoard import GameTime
+from scripts.gamecomponents.ScoreBoard import OutOfGameTimeException
+from scripts.gamecomponents.ScoreBoard import ScoreBoard
+from scripts.tracking.MarkerTracker import MarkerTracker
+from scripts.videocapture.VideoCapture import VideoCapture
 
 
 class Game(object):

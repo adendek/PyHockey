@@ -4,9 +4,9 @@ from datetime import datetime
 
 import pygame as pg
 
-from data.DrawableInterface import Drawable
-from data.Player import Player
-from data.Text import Text
+from scripts.gamecomponents.DrawableInterface import Drawable
+from scripts.gamecomponents.Player import Player
+from scripts.gamecomponents.Text import Text
 
 
 class GameTime:

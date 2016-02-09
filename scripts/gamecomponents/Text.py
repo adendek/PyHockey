@@ -1,6 +1,6 @@
 import pygame
 
-from data.DrawableInterface import Drawable
+from scripts.gamecomponents.DrawableInterface import Drawable
 
 
 class Text(Drawable):

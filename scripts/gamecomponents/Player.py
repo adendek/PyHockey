@@ -1,7 +1,7 @@
 from __future__ import division
 
-from Logger import Logger
-from Mallet import Mallet
+from scripts.Logger import Logger
+from scripts.gamecomponents.Mallet import Mallet
 
 
 class TooManyPointsException(Exception):

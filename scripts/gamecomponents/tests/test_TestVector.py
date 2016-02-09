@@ -1,9 +1,10 @@
 import unittest
-from data.Vector import Vector
-from math import sqrt
 from math import cos
 from math import pi
 from math import sin
+from math import sqrt
+
+from scripts.gamecomponents.Vector import Vector
 
 
 class TestVector(unittest.TestCase):
@@ -15,21 +16,21 @@ class TestVector(unittest.TestCase):
                       ((-5., -3.), -5 * -5 + -3 * -3), ((12., 34.), 12 * 12 + 34 * 34),
                       ((15., -30.), 15 * 15 + -30 * -30), ((14., -98.), 14 * 14 + -98 * -98))
     set_value = (0, 2, 14, 72, 114, 314, 90, 23)
-    rotate_value = (((0.1, 0.5), pi/3,
-                     Vector(0.1 * cos(pi/3) - 0.5*sin(pi/3), 0.1 * sin(pi/3) + 0.5 * cos(pi/3))),
-                    ((5., 0.2), pi/6,
-                     Vector(5.0 * cos(pi/6) - 0.2*sin(pi/6), 5.0 * sin(pi/6) + 0.2 * cos(pi/6))),
+    rotate_value = (((0.1, 0.5), pi / 3,
+                     Vector(0.1 * cos(pi / 3) - 0.5 * sin(pi / 3), 0.1 * sin(pi / 3) + 0.5 * cos(pi / 3))),
+                    ((5., 0.2), pi / 6,
+                     Vector(5.0 * cos(pi / 6) - 0.2 * sin(pi / 6), 5.0 * sin(pi / 6) + 0.2 * cos(pi / 6))),
                     ((5.5, 3.2), pi,
-                     Vector(5.5 * cos(pi) - 3.2*sin(pi), 5.5 * sin(pi) + 3.2 * cos(pi))),
-                    ((18., 30.42), pi/2,
-                     Vector(18.0 * cos(pi/2) - 30.42*sin(pi/2), 18.0 * sin(pi/2) + 30.42 * cos(pi/2))),
-                    ((39.3, 10.2), pi/6,
-                     Vector(39.3 * cos(pi/6) - 10.2 * sin(pi/6), 39.3 * sin(pi/6) + 10.2 * cos(pi/6))),
-                    ((15., 52), pi/12,
-                     Vector(15.0 * cos(pi/12) - 52*sin(pi/12), 15.0 * sin(pi/12) + 52 * cos(pi/12))),
-                    ((5., 0.2), 2*pi,
-                     Vector(5.0 * cos(2*pi) - 0.2*sin(2*pi), 5.0 * sin(2*pi) + 0.2 * cos(2*pi))))
-    dot_value = (((0, 0), (1, 1), 0*1 + 0*1),
+                     Vector(5.5 * cos(pi) - 3.2 * sin(pi), 5.5 * sin(pi) + 3.2 * cos(pi))),
+                    ((18., 30.42), pi / 2,
+                     Vector(18.0 * cos(pi / 2) - 30.42 * sin(pi / 2), 18.0 * sin(pi / 2) + 30.42 * cos(pi / 2))),
+                    ((39.3, 10.2), pi / 6,
+                     Vector(39.3 * cos(pi / 6) - 10.2 * sin(pi / 6), 39.3 * sin(pi / 6) + 10.2 * cos(pi / 6))),
+                    ((15., 52), pi / 12,
+                     Vector(15.0 * cos(pi / 12) - 52 * sin(pi / 12), 15.0 * sin(pi / 12) + 52 * cos(pi / 12))),
+                    ((5., 0.2), 2 * pi,
+                     Vector(5.0 * cos(2 * pi) - 0.2 * sin(2 * pi), 5.0 * sin(2 * pi) + 0.2 * cos(2 * pi))))
+    dot_value = (((0, 0), (1, 1), 0 * 1 + 0 * 1),
                  ((5, 18), (23, 55), 5 * 23 + 18 * 55),
                  ((280, 3), (20, 98), 280 * 20 + 3 * 98),
                  ((34, 12), (18, 44), 34 * 18 + 12 * 44))
@@ -60,7 +61,7 @@ class TestVector(unittest.TestCase):
         for tup in self.set_value:
             checked_vector = Vector(5, 5)
             checked_vector.length = tup
-            self.assertAlmostEqual(tup, sqrt(checked_vector.x**2 + checked_vector.y**2))
+            self.assertAlmostEqual(tup, sqrt(checked_vector.x ** 2 + checked_vector.y ** 2))
 
     def test_rotated(self):
         for tup in self.rotate_value:
@@ -107,8 +108,8 @@ class TestVector(unittest.TestCase):
         for tup in self.init_value:
             checked_vector = Vector(tup)
             checked_vector.change_state(tup)
-            self.assertAlmostEqual(tup[1]*2, checked_vector.y)
-            self.assertAlmostEqual(tup[0]*2, checked_vector.x)
+            self.assertAlmostEqual(tup[1] * 2, checked_vector.y)
+            self.assertAlmostEqual(tup[0] * 2, checked_vector.x)
 
     def test_state(self):
         for tup in self.init_value:
@@ -116,6 +117,7 @@ class TestVector(unittest.TestCase):
             checked_vector.state = tup
             self.assertAlmostEqual(tup[0], checked_vector.x)
             self.assertAlmostEqual(tup[1], checked_vector.y)
+
 
 if __name__ == '__main__':
     unittest.main()
